@@ -14,6 +14,7 @@ warnings.filterwarnings("ignore")
 
 plt.ion()   # interactive mode
 
+
 class CataractDataset(Dataset):
     """Face Landmarks dataset."""
 
@@ -25,7 +26,8 @@ class CataractDataset(Dataset):
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
-        self.df = pd.read_csv(csv_file, sep=" ", header=None, names=[0, 1])
+        self.df = pd.read_csv(csv_file, sep=" ", header=None).reset_index()
+        print(self.df)
         self.transform = transform
 
     def __len__(self):
@@ -37,7 +39,7 @@ class CataractDataset(Dataset):
 
         img_name = self.df.iloc[idx, 0]
         image = io.imread(img_name)
-        label = self.df[idx, 1] 
+        label = self.df[idx, 1]
 
         if self.transform:
             image = self.transform(image)

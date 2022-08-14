@@ -50,8 +50,8 @@ def train_target_cnn(
     source_train_loader, target_train_loader, target_test_loader,
     args=None
 ):
-    validation = validate(source_cnn, target_test_loader, criterion, args=args)
-    log_source = 'Source/Acc {:.3f} '.format(validation['acc'])
+    # validation = validate(source_cnn, target_test_loader, criterion, args=args)
+    # log_source = 'Source/Acc {:.3f} '.format(validation['acc'])
 
     best_score = None
     for epoch_i in range(1, 1 + args.epochs):
@@ -176,6 +176,7 @@ def validate(model, dataloader, criterion, args=None):
     model.eval()
     losses = AverageMeter()
     targets, probas = [], []
+    print(len(dataloader))
     with torch.no_grad():
         for iter_i, (data, target) in enumerate(dataloader):
             bs = target.size(0)
