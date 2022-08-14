@@ -1,0 +1,24 @@
+#!/bin/bash
+#SBATCH --job-name=adda
+#SBATCH --time=20:00:00
+#SBATCH --partition=gpuq
+#SBATCH --gres=gpu:1
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=6
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=kjo3@jhu.edu
+#### load and unload modules you may need
+# module unload openmpi/intel
+# module load mvapich2/gcc/64/2.0b
+module unload python
+module load anaconda
+module load cuda10.2/toolkit/10.2.89
+eval "$(conda shell.bash hook)"
+conda activate /projects/skillvba/code/bwan2/dl3
+#### execute code and write output file to OUT-24log.
+# time mpiexec ./code-mvapich.x > OUT-24log
+rm -f ../logs/train_adda.log
+rm -f ../logs/trainerror_adda.log
+cd .. && python -u main.py --logdir outputs --n_workers 32 --slope 0.2 > ./logs/train_adda.log 2> ./logs/trainerror_adda.log 
+echo "Finished train_minicohort27 with job $SLURM_JOBID" 
