@@ -9,6 +9,8 @@ from torchvision import transforms
 from models import CNN, Discriminator
 from trainer import train_target_cnn
 from utils import get_logger
+from dataset import CataractDataset
+from torchvision.models import resnet101
 
 
 def run(args):
@@ -23,16 +25,18 @@ def run(args):
         transforms.ToTensor()]
     )
     target_transform = transforms.Compose([
-        transforms.Resize(32),
         transforms.ToTensor(),
-        transforms.Lambda(lambda x: x.repeat(3, 1, 1))
     ])
-    source_dataset_train = SVHN(
-        './input', 'train', transform=source_transform, download=True)
-    target_dataset_train = MNIST(
-        './input', 'train', transform=target_transform, download=True)
-    target_dataset_test = MNIST(
-        './input', 'test', transform=target_transform, download=True)
+    source_dataset_train = CataractDataset(
+        'src_train.txt',
+        transform=source_transform
+    )
+    target_dataset_train = CataractDataset(
+        'tgt_train.txt', 
+        transform=target_transform)
+    target_dataset_test = CataractDataset(
+        'tgt_test.txt', 
+        transform=target_transform)
     source_train_loader = DataLoader(
         source_dataset_train, args.batch_size, shuffle=True,
         drop_last=True,
@@ -46,15 +50,15 @@ def run(args):
         num_workers=args.n_workers)
 
     # train source CNN
-    source_cnn = CNN(in_channels=args.in_channels).to(args.device)
-    if os.path.isfile(args.trained):
-        c = torch.load(args.trained)
-        source_cnn.load_state_dict(c['model'])
-        logger.info('Loaded `{}`'.format(args.trained))
+    source_cnn =  nn.Sequential(*list(resnet101(pretrained=True).children())[:-2]).to(args.device)
+    # if os.path.isfile(args.trained):
+    #     c = torch.load(args.trained)
+    #     source_cnn.load_state_dict(c['model'])
+    #     logger.info('Loaded `{}`'.format(args.trained))
 
     # train target CNN
-    target_cnn = CNN(in_channels=args.in_channels, target=True).to(args.device)
-    target_cnn.load_state_dict(source_cnn.state_dict())
+    target_cnn = nn.Sequential(*list(resnet101(pretrained=True).children())[:-2]).to(args.device)
+    # target_cnn.load_state_dict(source_cnn.state_dict())
     discriminator = Discriminator(args=args).to(args.device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(
