@@ -62,7 +62,7 @@ def run(args):
     discriminator = Discriminator(args=args).to(args.device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(
-        target_cnn.encoder.parameters(),
+        target_cnn.parameters(),
         lr=args.lr, betas=args.betas, weight_decay=args.weight_decay)
     d_optimizer = optim.Adam(
         discriminator.parameters(),
