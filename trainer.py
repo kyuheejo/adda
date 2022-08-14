@@ -3,7 +3,6 @@ from time import time
 
 import numpy as np
 from sklearn.metrics import accuracy_score
-from tensorboardX import SummaryWriter
 import torch
 
 from utils import AverageMeter, save
@@ -54,7 +53,6 @@ def train_target_cnn(
     validation = validate(source_cnn, target_test_loader, criterion, args=args)
     log_source = 'Source/Acc {:.3f} '.format(validation['acc'])
 
-    writer = SummaryWriter(args.logdir)
     best_score = None
     for epoch_i in range(1, 1 + args.epochs):
         start_time = time()
@@ -91,12 +89,6 @@ def train_target_cnn(
         }
         save(args.logdir, state_dict, is_best)
 
-        # tensorboard
-        writer.add_scalar('Adv/D/Loss', training['d/loss'], epoch_i)
-        writer.add_scalar('Adv/Target/Loss', training['target/loss'], epoch_i)
-        writer.add_scalar('Val/Target/Loss', validation['loss'], epoch_i)
-        writer.add_scalar('Val/Target/Acc', validation['acc'], epoch_i)
-        writer.add_scalar('Train/Target/Acc', validation2['acc'], epoch_i)
 
 
 def adversarial(

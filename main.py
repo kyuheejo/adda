@@ -6,7 +6,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # NN
     parser.add_argument('--in_channels', type=int, default=3)
-    parser.add_argument('--n_classes', type=int, default=10)
+    # parser.add_argument('--n_classes', type=int, default=10)
     parser.add_argument('--trained', type=str, default='')
     parser.add_argument('--slope', type=float, default=0.1)
     # train
