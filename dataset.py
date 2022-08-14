@@ -38,8 +38,10 @@ class CataractDataset(Dataset):
             idx = idx.tolist()
 
         img_name = self.df.iloc[idx, 0]
+        print(img_name)
         image = io.imread(img_name)
         label = self.df[idx, 1]
+        print(label)
 
         if self.transform:
             image = self.transform(image)
