@@ -68,13 +68,9 @@ class CNN(nn.Module):
         self.low_avgpool = nn.AvgPool2d(8)
 
     def forward(self, x):
-        print(x.size())
         x = self.rgb_base(x) # batchx512x8x8
-        print(x.size())
         x = self.low_avgpool(x)     # batchx512x1x1
-        print(x.size())
         x = x.squeeze()    # 1xframesx512 (bs x seq_len x embed_dim)
-        print(x.size())
         return x
 
 class Discriminator(nn.Module):

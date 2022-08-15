@@ -28,6 +28,7 @@ def train_source_cnn(
         log += '| Val/Loss {:.3f} Acc {:.3f} '.format(
             validation['loss'], validation['acc'])
         log += 'Time {:.2f}s'.format(time() - start_time)
+        print(log)
         logger.info(log)
 
         # save
@@ -50,8 +51,8 @@ def train_target_cnn(
     source_train_loader, target_train_loader, target_test_loader,
     args=None
 ):
-    # validation = validate(source_cnn, target_test_loader, criterion, args=args)
-    # log_source = 'Source/Acc {:.3f} '.format(validation['acc'])
+    validation = validate(source_cnn, target_test_loader, criterion, args=args)
+    log_source = 'Source/Acc {:.3f} '.format(validation['acc'])
 
     best_score = None
     for epoch_i in range(1, 1 + args.epochs):
@@ -113,7 +114,6 @@ def adversarial(
         bs = source_data.size(0)
 
         D_input_source = source_cnn(source_data)
-        print(D_input_source.size())
         D_input_target = target_cnn(target_data)
         D_target_source = torch.tensor(
             [0] * bs, dtype=torch.long).to(args.device)
@@ -177,7 +177,6 @@ def validate(model, dataloader, criterion, args=None):
     model.eval()
     losses = AverageMeter()
     targets, probas = [], []
-    print(len(dataloader))
     with torch.no_grad():
         for iter_i, (data, target) in enumerate(dataloader):
             bs = target.size(0)
