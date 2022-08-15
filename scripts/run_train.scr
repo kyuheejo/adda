@@ -20,5 +20,5 @@ conda activate /projects/skillvba/code/bwan2/dl3
 # time mpiexec ./code-mvapich.x > OUT-24log
 rm -f ../logs/train_adda.log
 rm -f ../logs/trainerror_adda.log
-cd .. && python -u main.py --logdir outputs --n_workers 32 --slope 0.2 > ./logs/train_adda.log 2> ./logs/trainerror_adda.log 
+cd .. && python -u main.py --batch_size 8 --logdir outputs --n_workers 32 --slope 0.2 > ./logs/train_adda.log 2> ./logs/trainerror_adda.log 
 echo "Finished train_minicohort27 with job $SLURM_JOBID" 
