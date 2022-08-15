@@ -43,8 +43,7 @@ class CataractDataset(Dataset):
         print(img_name)
         print("loading image")
         image = io.imread(img_name)
-        label = self.df[idx, 1]
-        print(label)
+        label = 0
 
         if self.transform:
             image = self.transform(image)
