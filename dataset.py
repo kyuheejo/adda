@@ -37,8 +37,11 @@ class CataractDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
+        print(idx)
+        print(len(self.df))
         img_name = self.df.iloc[idx, 0]
         print(img_name)
+        print("loading image")
         image = io.imread(img_name)
         label = self.df[idx, 1]
         print(label)
