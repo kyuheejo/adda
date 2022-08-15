@@ -26,7 +26,7 @@ class CataractDataset(Dataset):
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
-        self.df = pd.read_csv(csv_file, sep=" ", header=None)
+        self.df = pd.read_csv(csv_file, header=None)
         print(self.df)
         self.transform = transform
 

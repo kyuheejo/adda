@@ -28,14 +28,14 @@ def run(args):
         transforms.ToTensor(),
     ])
     source_dataset_train = CataractDataset(
-        'src_train.txt',
+        'src_train.csv',
         transform=source_transform
     )
     target_dataset_train = CataractDataset(
-        'tgt_train.txt', 
+        'tgt_train.csv', 
         transform=target_transform)
     target_dataset_test = CataractDataset(
-        'tgt_test.txt', 
+        'tgt_test.csv', 
         transform=target_transform)
     source_train_loader = DataLoader(
         source_dataset_train, args.batch_size, shuffle=True,
