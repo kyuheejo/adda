@@ -1,5 +1,6 @@
 from torch import nn
 import torch.nn.functional as F
+from torchvision.models import resnet34
 
 
 class Encoder(nn.Module):
@@ -46,20 +47,31 @@ class Classifier(nn.Module):
         return x
 
 
+# class CNN(nn.Module):
+#     def __init__(self, in_channels=1, n_classes=10, target=False):
+#         super(CNN, self).__init__()
+#         self.encoder = Encoder(in_channels=in_channels)
+#         self.classifier = Classifier(n_classes)
+#         if target:
+#             for param in self.classifier.parameters():
+#                 param.requires_grad = False
+
+#     def forward(self, x):
+#         x = self.encoder(x)
+#         x = self.classifier(x)
+#         return x
+
 class CNN(nn.Module):
-    def __init__(self, in_channels=1, n_classes=10, target=False):
+    def __init__(self):
         super(CNN, self).__init__()
-        self.encoder = Encoder(in_channels=in_channels)
-        self.classifier = Classifier(n_classes)
-        if target:
-            for param in self.classifier.parameters():
-                param.requires_grad = False
+        self.rgb_base = nn.Sequential(*list(resnet34(pretrained=True).children())[:-2])
+        self.low_avgpool = nn.AvgPool2d(8)
 
     def forward(self, x):
-        x = self.encoder(x)
-        x = self.classifier(x)
+        x = self.rgb_base(x) # batchx512x8x8
+        x = self.low_avgpool(x)     # batchx512x1x1
+        x = x.squeeze()    # 1xframesx512 (bs x seq_len x embed_dim)
         return x
-
 
 class Discriminator(nn.Module):
     def __init__(self, h=500, args=None):

@@ -50,14 +50,14 @@ def run(args):
         num_workers=args.n_workers)
 
     # train source CNN
-    source_cnn =  nn.Sequential(*list(resnet34(pretrained=True).children())[:-2]).to(args.device)
+    source_cnn =  CNN().to(args.device)
     # if os.path.isfile(args.trained):
     #     c = torch.load(args.trained)
     #     source_cnn.load_state_dict(c['model'])
     #     logger.info('Loaded `{}`'.format(args.trained))
 
     # train target CNN
-    target_cnn = nn.Sequential(*list(resnet34(pretrained=True).children())[:-2]).to(args.device)
+    target_cnn = CNN().to(args.device)
     # target_cnn.load_state_dict(source_cnn.state_dict())
     discriminator = Discriminator(args=args).to(args.device)
     criterion = nn.CrossEntropyLoss()
