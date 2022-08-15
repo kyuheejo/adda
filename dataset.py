@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
+from PIL import Image
 
 # Ignore warnings
 import warnings
@@ -37,7 +38,7 @@ class CataractDataset(Dataset):
             idx = idx.tolist()
 
         img_name = self.df.iloc[idx, 0]
-        image = io.imread(img_name)
+        image = Image.open(img_name) 
         label = 0
 
         if self.transform:
