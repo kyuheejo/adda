@@ -27,7 +27,6 @@ class CataractDataset(Dataset):
                 on a sample.
         """
         self.df = pd.read_csv(csv_file, header=None)
-        print(self.df)
         self.transform = transform
 
     def __len__(self):
@@ -37,11 +36,7 @@ class CataractDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        print(idx)
-        print(len(self.df))
         img_name = self.df.iloc[idx, 0]
-        print(img_name)
-        print("loading image")
         image = io.imread(img_name)
         label = 0
 
