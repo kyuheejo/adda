@@ -22,9 +22,11 @@ def run(args):
     # data
     source_transform = transforms.Compose([
         # transforms.Grayscale(),
+        transforms.Resize(256),
         transforms.ToTensor()]
     )
     target_transform = transforms.Compose([
+        transforms.Resize(256),
         transforms.ToTensor(),
     ])
     source_dataset_train = CataractDataset(
