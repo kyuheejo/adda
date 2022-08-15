@@ -113,6 +113,7 @@ def adversarial(
         bs = source_data.size(0)
 
         D_input_source = source_cnn(source_data)
+        print(D_input_source.size)
         D_input_target = target_cnn(target_data)
         D_target_source = torch.tensor(
             [0] * bs, dtype=torch.long).to(args.device)
