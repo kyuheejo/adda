@@ -64,7 +64,7 @@ class CNN(nn.Module):
 class Discriminator(nn.Module):
     def __init__(self, h=500, args=None):
         super(Discriminator, self).__init__()
-        self.l1 = nn.Linear(500, h)
+        self.l1 = nn.Linear(512, h)
         self.l2 = nn.Linear(h, h)
         self.l3 = nn.Linear(h, 2)
         self.slope = args.slope
