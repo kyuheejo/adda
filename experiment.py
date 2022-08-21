@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from torchvision.datasets import SVHN, MNIST
 from torchvision import transforms
 
-from models import CNN, Discriminator
+from models import CNN, Discriminator, TempAttnNet
 from trainer import train_target_cnn
 from utils import get_logger
 from dataset import CataractDataset
@@ -52,19 +52,19 @@ def run(args):
         num_workers=args.n_workers)
 
     # train source CNN
-    source_cnn =  CNN().to(args.device)
+    source_cnn = TempAttnNet().to(args.device)
     # if os.path.isfile(args.trained):
     #     c = torch.load(args.trained)
     #     source_cnn.load_state_dict(c['model'])
     #     logger.info('Loaded `{}`'.format(args.trained))
 
     # train target CNN
-    target_cnn = CNN().to(args.device)
+    target_cnn = TempAttnNet().to(args.device)
     # target_cnn.load_state_dict(source_cnn.state_dict())
     discriminator = Discriminator(args=args).to(args.device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(
-        target_cnn.parameters(),
+        TempAttnNet.encoder.parameters(),
         lr=args.lr, betas=args.betas, weight_decay=args.weight_decay)
     d_optimizer = optim.Adam(
         discriminator.parameters(),

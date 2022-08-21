@@ -100,7 +100,7 @@ def adversarial(
     args=None
 ):
     source_cnn.eval()
-    target_cnn.train()
+    target_cnn.encoder.train()
     discriminator.train()
 
     losses, d_losses = AverageMeter(), AverageMeter()
@@ -113,8 +113,8 @@ def adversarial(
         target_data = target_data.to(args.device)
         bs = source_data.size(0)
 
-        D_input_source = source_cnn(source_data)
-        D_input_target = target_cnn(target_data)
+        D_input_source = source_cnn.encoder(source_data)
+        D_input_target = target_cnn.encoder(target_data)
         D_target_source = torch.tensor(
             [0] * bs, dtype=torch.long).to(args.device)
         D_target_target = torch.tensor(
@@ -132,7 +132,7 @@ def adversarial(
         d_losses.update(d_loss.item(), bs)
 
         # train Target
-        D_input_target = target_cnn(target_data)
+        D_input_target = target_cnn.encoder(target_data)
         D_output_target = discriminator(D_input_target)
         loss = criterion(D_output_target, D_target_source)
         optimizer.zero_grad()
