@@ -18,7 +18,7 @@ eval "$(conda shell.bash hook)"
 conda activate /projects/skillvba/code/bwan2/dl3
 #### execute code and write output file to OUT-24log.
 # time mpiexec ./code-mvapich.x > OUT-24log
-rm -f ../logs/train_adda.log
-rm -f ../logs/trainerror_adda.log
-cd .. && python -u main.py --batch_size 8 --logdir outputs --n_workers 32 --slope 0.2 > ./logs/train_adda.log 2> ./logs/trainerror_adda.log 
+rm -f ../logs/train_adda64.log
+rm -f ../logs/trainerror_adda64.log
+cd .. && python -u main.py --batch_size 64 --logdir outputs --n_workers 32 --slope 0.2 > ./logs/train_adda64.log 2> ./logs/trainerror_adda64.log 
 echo "Finished train_minicohort27 with job $SLURM_JOBID" 
